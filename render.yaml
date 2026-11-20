@@ -1,0 +1,11 @@
+services:
+  - type: web
+    name: ludo-live
+    runtime: docker
+    dockerfilePath: ./Dockerfile
+    dockerContext: .
+    plan: free
+    healthCheckPath: /healthz
+    envVars:
+      - key: TRUST_PROXY
+        value: xff

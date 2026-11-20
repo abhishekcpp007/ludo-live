@@ -1,0 +1,14 @@
+{
+  "name": "ludo-live",
+  "version": "2.0.0",
+  "private": true,
+  "description": "Live 4-player Ludo with video/audio call, matchmaking, virtual coins and a skin shop",
+  "main": "src/server.js",
+  "scripts": {
+    "start": "node src/server.js",
+    "test": "node --test --test-concurrency=1 test/"
+  },
+  "engines": { "node": ">=20" },
+  "dependencies": { "socket.io": "^4.7.5" },
+  "devDependencies": { "socket.io-client": "^4.7.5" }
+}

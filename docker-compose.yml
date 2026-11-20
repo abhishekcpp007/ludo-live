@@ -1,0 +1,55 @@
+services:
+  app:
+    build:
+      context: .
+      target: runtime
+    image: ludo-live:latest
+    restart: unless-stopped
+    ports:
+      - "127.0.0.1:3000:3000"
+    environment:
+      TRUST_PROXY: cloudflare
+      TURN_URL: ${TURN_URL:-}
+      TURN_USER: ${TURN_USER:-}
+      TURN_PASS: ${TURN_PASS:-}
+    volumes:
+      - ludo-data:/data
+    read_only: true
+    tmpfs:
+      - /tmp
+    cap_drop: [ALL]
+    security_opt:
+      - no-new-privileges:true
+    mem_limit: 256m
+    pids_limit: 128
+
+  tunnel:
+    image: cloudflare/cloudflared:2024.10.1
+    profiles: [public]
+    restart: unless-stopped
+    command: tunnel --no-autoupdate --url http://app:3000
+    depends_on:
+      app:
+        condition: service_healthy
+    read_only: true
+    cap_drop: [ALL]
+    security_opt:
+      - no-new-privileges:true
+
+  e2e:
+    image: mcr.microsoft.com/playwright:v1.48.2-jammy
+    profiles: [e2e]
+    working_dir: /e2e
+    environment:
+      BASE_URL: http://localhost:3000
+    volumes:
+      - ./e2e:/e2e
+    command: sh -c "npm install --no-audit --no-fund --silent && node run.js"
+    depends_on:
+      app:
+        condition: service_healthy
+    network_mode: "service:app"
+    ipc: host
+
+volumes:
+  ludo-data:

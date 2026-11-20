@@ -1,0 +1,177 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <meta name="theme-color" content="#0f1020" />
+  <meta name="description" content="Play Ludo live with 4 friends on a video or audio call." />
+  <title>Ludo Live</title>
+  <link rel="icon" href="icon.svg" type="image/svg+xml" />
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <section id="lobby" class="screen">
+    <div class="hero">
+      <div class="logo" aria-hidden="true">
+        <span class="lr"></span><span class="lg"></span><span class="lb"></span><span class="ly"></span>
+      </div>
+      <h1>Ludo Live</h1>
+      <p class="tag">4 dost, ek board, live video call</p>
+
+      <div class="card">
+        <div class="walletRow">
+          <div class="coins big" aria-label="Your coins"><span class="coin"></span><b id="coinsLobby">0</b></div>
+          <div class="row">
+            <button id="bonusBtn" class="btn small gift hidden">Free 500</button>
+            <button id="shopBtnLobby" class="btn small">Shop</button>
+          </div>
+        </div>
+        <div id="statsLine" class="stats"></div>
+
+        <label class="field">
+          <span>Your name</span>
+          <input id="name" maxlength="16" autocomplete="nickname" placeholder="Enter your name" />
+        </label>
+
+        <div class="field">
+          <span>Join the call with</span>
+          <div class="seg" role="radiogroup" aria-label="Call mode">
+            <label><input type="radio" name="mode" value="video" checked /><span>Video</span></label>
+            <label><input type="radio" name="mode" value="audio" /><span>Audio</span></label>
+            <label><input type="radio" name="mode" value="none" /><span>Music only</span></label>
+          </div>
+        </div>
+
+        <div id="inviteJoin" class="hidden stack">
+          <button id="inviteJoinBtn" class="btn primary big"></button>
+          <button id="notInvite" class="link">Create my own room instead</button>
+        </div>
+
+        <div id="normalJoin" class="stack">
+          <div class="field">
+            <span>Table entry (virtual coins)</span>
+            <div class="seg four" role="radiogroup" aria-label="Table entry">
+              <label><input type="radio" name="stake" value="0" /><span>Free</span></label>
+              <label><input type="radio" name="stake" value="100" checked /><span>100</span></label>
+              <label><input type="radio" name="stake" value="500" /><span>500</span></label>
+              <label><input type="radio" name="stake" value="2500" /><span>2500</span></label>
+            </div>
+          </div>
+          <button id="quickBtn" class="btn world big">Play online with anyone</button>
+          <button id="createBtn" class="btn primary big">Create room for friends</button>
+          <div class="divider"><span>or join with a code</span></div>
+          <div class="row">
+            <input id="code" maxlength="5" autocomplete="off" spellcheck="false" placeholder="ABCDE" aria-label="Room code" />
+            <button id="joinBtn" class="btn">Join</button>
+          </div>
+        </div>
+
+        <div id="searching" class="searching hidden">
+          <div class="radar" aria-hidden="true"></div>
+          <b id="searchTitle">Finding players…</b>
+          <span id="searchSub" class="muted"></span>
+          <button id="cancelQuick" class="btn">Cancel</button>
+        </div>
+        <p id="lobbyErr" class="err" role="alert"></p>
+      </div>
+      <p class="foot">Coins sirf game ke virtual points hain. Inhe khareeda ya cash nahi kiya ja sakta. Video aur audio seedha players ke beech jaata hai, peer to peer.</p>
+    </div>
+  </section>
+
+  <section id="game" class="screen hidden">
+    <header class="bar">
+      <div class="left">
+        <div class="logo small" aria-hidden="true">
+          <span class="lr"></span><span class="lg"></span><span class="lb"></span><span class="ly"></span>
+        </div>
+        <button id="roomChip" class="chip" title="Copy invite link">
+          <span class="dot" id="netDot"></span><span id="roomCode"></span><span class="ico" data-icon="link"></span>
+        </button>
+      </div>
+      <div class="right">
+        <div class="coins" aria-label="Your coins"><span class="coin"></span><b id="coinsBar">0</b></div>
+        <button id="shopBtn" class="iconbtn" aria-label="Open shop" data-icon="bag"></button>
+        <button id="musicBtn" class="iconbtn" aria-label="Change music" data-icon="music"></button>
+        <button id="micBtn" class="iconbtn" aria-label="Toggle microphone" data-icon="mic"></button>
+        <button id="camBtn" class="iconbtn" aria-label="Toggle camera" data-icon="cam"></button>
+        <button id="soundBtn" class="iconbtn" aria-label="Toggle sounds" data-icon="sound"></button>
+        <button id="leaveBtn" class="iconbtn danger" aria-label="Leave room" data-icon="leave"></button>
+      </div>
+    </header>
+
+    <div id="netBanner" class="banner hidden">Reconnecting…</div>
+
+    <main class="layout">
+      <div class="boardCol">
+        <div id="board" class="board">
+          <svg id="boardSvg" viewBox="0 0 15 15" aria-hidden="true"></svg>
+          <div id="tokens" class="tokens"></div>
+
+          <div id="waitPanel" class="overlay hidden">
+            <div class="panel">
+              <h2>Waiting room</h2>
+              <p id="waitCount"></p>
+              <ul id="waitList" class="waitList"></ul>
+              <button id="inviteBtn" class="btn">Copy invite link</button>
+              <button id="startBtn" class="btn primary">Start game</button>
+              <p id="waitHint" class="muted"></p>
+            </div>
+          </div>
+
+          <div id="overPanel" class="overlay hidden">
+            <canvas id="confetti"></canvas>
+            <div class="panel">
+              <div class="trophy" aria-hidden="true"><div class="rays"></div><span>🏆</span></div>
+              <h2 id="overTitle">Game over</h2>
+              <ol id="podium" class="podium"></ol>
+              <button id="restartBtn" class="btn primary">Play again</button>
+              <p id="overHint" class="muted"></p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <aside class="side">
+        <div class="turnCard">
+          <button id="dice" class="dice" aria-label="Roll dice" disabled>
+            <span class="face" id="diceFace"></span>
+          </button>
+          <div class="turnText">
+            <div id="turnTitle" class="turnTitle"></div>
+            <div id="turnSub" class="turnSub"></div>
+            <div id="potLine" class="pot hidden"><span class="coin"></span><span id="potText"></span></div>
+            <div class="timer"><div id="timerFill" class="fill"></div></div>
+          </div>
+          <button id="emoteBtn" class="emoteBtn" aria-label="Send a reaction" aria-expanded="false">😊</button>
+          <div id="emotePop" class="emotePop hidden" role="menu"></div>
+        </div>
+        <div id="videos" class="videos"></div>
+        <ul id="log" class="log" aria-live="polite"></ul>
+      </aside>
+    </main>
+  </section>
+
+  <div id="shop" class="modal hidden" role="dialog" aria-modal="true" aria-labelledby="shopTitle">
+    <div class="sheet">
+      <div class="sheetHead">
+        <h2 id="shopTitle">Token shop</h2>
+        <div class="coins"><span class="coin"></span><b id="coinsShop">0</b></div>
+        <button id="shopClose" class="iconbtn" aria-label="Close shop">✕</button>
+      </div>
+      <p class="muted">Apni goti ka look chuno. Coins game jeet kar aur daily bonus se milte hain.</p>
+      <div id="shopGrid" class="shopGrid"></div>
+    </div>
+  </div>
+
+  <div id="floaters" class="floaters" aria-hidden="true"></div>
+  <div id="toast" class="toast" role="status"></div>
+
+  <script src="/socket.io/socket.io.min.js"></script>
+  <script src="icons.js"></script>
+  <script src="sound.js"></script>
+  <script src="music.js"></script>
+  <script src="board.js"></script>
+  <script src="call.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>
