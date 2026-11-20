@@ -3,8 +3,9 @@
   const COLORS = ["red", "green", "yellow", "blue"];
   const PIPS = { 1: [4], 2: [0, 8], 3: [0, 4, 8], 4: [0, 2, 6, 8], 5: [0, 2, 4, 6, 8], 6: [0, 2, 3, 5, 6, 8] };
   const TOAST_MS = 2400;
-  const ROLL_ANIM_MS = 500;
-  const ROLL_FLICKER_MS = 70;
+  const ROLL_ANIM_MS = 850;
+  const FACE_ROT = { 1: [0, 0], 2: [0, -90], 3: [-90, 0], 4: [90, 0], 5: [0, 90], 6: [0, 180] };
+  const FULL_TURN = 360;
   const CONFETTI_MS = 4000;
   const CONFETTI_COUNT = 140;
   const MEDAL = ["🥇", "🥈", "🥉", "4"];
@@ -54,6 +55,7 @@
   let wasMyTurn = false;
   let coins = 0;
   let searchTimer = null;
+  const spin = { x: 0, y: 0 };
   let wallet = { owned: ["classic"], skin: "classic", stats: null };
   let catalog = { skins: [], emotes: [] };
   const remoteStreams = new Map();
@@ -469,29 +471,47 @@
   });
 
   function buildDice() {
-    const face = $("diceFace");
-    for (let i = 0; i < 9; i++) {
-      const p = document.createElement("span");
-      p.className = "pip";
-      face.appendChild(p);
+    const cube = $("cube");
+    for (let n = 1; n <= 6; n++) {
+      const face = document.createElement("span");
+      face.className = `dface s${n}`;
+      const on = new Set(PIPS[n]);
+      for (let i = 0; i < 9; i++) {
+        const p = document.createElement("span");
+        p.className = on.has(i) ? "pip on" : "pip";
+        face.appendChild(p);
+      }
+      cube.appendChild(face);
     }
     showFace(6);
   }
+  function cubeTo(n, extraX, extraY) {
+    const [fx, fy] = FACE_ROT[n] || FACE_ROT[1];
+    spin.x = Math.ceil(spin.x / FULL_TURN) * FULL_TURN + extraX * FULL_TURN;
+    spin.y = Math.ceil(spin.y / FULL_TURN) * FULL_TURN + extraY * FULL_TURN;
+    $("cube").style.transform = `rotateX(${spin.x + fx}deg) rotateY(${spin.y + fy}deg)`;
+  }
   function showFace(n) {
-    const on = new Set(PIPS[n] || []);
-    [...$("diceFace").children].forEach((p, i) => p.classList.toggle("on", on.has(i)));
+    const cube = $("cube");
+    if (cube.dataset.face === String(n)) return;
+    cube.dataset.face = String(n);
+    cube.classList.remove("spinning");
+    cubeTo(n, 0, 0);
   }
   function animateRoll(final) {
     const dice = $("dice");
+    const cube = $("cube");
     dice.classList.remove("rolling");
     void dice.offsetWidth;
     dice.classList.add("rolling");
+    cube.classList.add("spinning");
+    cube.dataset.face = String(final);
     Sound.play("roll");
-    const flick = setInterval(() => showFace(1 + Math.floor(Math.random() * 6)), ROLL_FLICKER_MS);
+    cubeTo(final, 2 + Math.floor(Math.random() * 2), 1 + Math.floor(Math.random() * 2));
     setTimeout(() => {
-      clearInterval(flick);
-      showFace(final);
       dice.classList.remove("rolling");
+      cube.classList.remove("spinning");
+      Sound.play("step");
       if (final === 6) sixBadge();
     }, ROLL_ANIM_MS);
   }

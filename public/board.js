@@ -44,6 +44,7 @@ const Board = (() => {
   let fxLayer = null;
   let boardEl = null;
   const skins = {};
+  const glows = {};
   let nameEls = {};
   let shown = null;
   let movableSet = new Set();
@@ -75,6 +76,15 @@ const Board = (() => {
   function draw(svg, tokenLayer) {
     layer = tokenLayer;
     boardEl = layer.parentElement;
+    COLORS.forEach((color) => {
+      const [yr, yc] = YARD_ORIGIN[color];
+      const g = document.createElement("div");
+      g.className = `yardGlow ${color}`;
+      g.style.left = `${(yc / SIZE) * 100}%`;
+      g.style.top = `${(yr / SIZE) * 100}%`;
+      layer.parentElement.insertBefore(g, layer);
+      glows[color] = g;
+    });
     fxLayer = document.createElement("div");
     fxLayer.className = "fx";
     boardEl.appendChild(fxLayer);
@@ -266,6 +276,7 @@ const Board = (() => {
     onPick = pick;
     movableSet = new Set(state.movable && state.turn === me ? state.movable : []);
     setNames(state.players);
+    COLORS.forEach((c) => glows[c] && glows[c].classList.toggle("on", state.phase === "playing" && state.turn === c));
     pending++;
     queue = queue
       .then(() => apply(state, hooks))

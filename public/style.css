@@ -532,3 +532,39 @@ input:focus { outline: none; border-color: var(--accent); }
 .tok.skin-fire .pawn { animation: none; box-shadow: 0 0 12px #f97316, inset 0 -3px 0 rgba(0,0,0,.2); }
 .btn.gift { animation: none; }
 .tile { will-change: auto; }
+
+/* 3D dice */
+.dice { --d: 50px; background: none; box-shadow: none; padding: 0; overflow: visible; display: grid; place-items: center; }
+.dice:not(:disabled):active { transform: scale(0.94); box-shadow: none; }
+.dice.rolling { animation: none; }
+.dice .stage { width: var(--d); height: var(--d); perspective: 420px; display: block; position: relative; z-index: 1; }
+.dice.rolling .stage { animation: diceHop 0.85s cubic-bezier(0.3, 0.6, 0.35, 1); }
+@keyframes diceHop { 0% { transform: translateY(0); } 30% { transform: translateY(-34px) scale(1.12); } 62% { transform: translateY(0) scale(0.96, 1.04); } 76% { transform: translateY(-8px); } 90%, 100% { transform: translateY(0); } }
+.dice .shadow { position: absolute; left: 50%; bottom: 2px; width: calc(var(--d) * 0.9); height: 10px; margin-left: calc(var(--d) * -0.45); border-radius: 50%; background: rgba(0, 0, 0, 0.45); filter: blur(4px); }
+.dice.rolling .shadow { animation: diceShadow 0.85s cubic-bezier(0.3, 0.6, 0.35, 1); }
+@keyframes diceShadow { 30% { transform: scale(0.55); opacity: 0.35; } 62% { transform: scale(1.05); opacity: 1; } 76% { transform: scale(0.85); } }
+.cube { position: absolute; inset: 0; transform-style: preserve-3d; transition: transform 0.35s ease; will-change: transform; }
+.cube.spinning { transition: transform 0.85s cubic-bezier(0.15, 0.75, 0.25, 1.04); }
+.dface {
+  position: absolute; inset: 0; display: grid; grid-template: repeat(3, 1fr) / repeat(3, 1fr);
+  padding: 15%; border-radius: 20%;
+  background: radial-gradient(circle at 30% 25%, #ffffff, #eef2f7 55%, #d5dce6);
+  box-shadow: inset 0 0 0 1px rgba(0, 0, 0, 0.06), inset 0 -4px 8px rgba(0, 0, 0, 0.12);
+  backface-visibility: hidden;
+}
+.dface.s1 { transform: translateZ(calc(var(--d) / 2)); }
+.dface.s6 { transform: rotateY(180deg) translateZ(calc(var(--d) / 2)); }
+.dface.s2 { transform: rotateY(90deg) translateZ(calc(var(--d) / 2)); }
+.dface.s5 { transform: rotateY(-90deg) translateZ(calc(var(--d) / 2)); }
+.dface.s3 { transform: rotateX(90deg) translateZ(calc(var(--d) / 2)); }
+.dface.s4 { transform: rotateX(-90deg) translateZ(calc(var(--d) / 2)); }
+.dface .pip { width: 76%; height: 76%; }
+.dice::after { inset: -6px; border-radius: 18px; }
+
+/* Active player's yard glows */
+.yardGlow { position: absolute; width: 40%; height: 40%; border-radius: 14px; pointer-events: none; opacity: 0; transition: opacity 0.3s; z-index: 1; box-shadow: inset 0 0 0 4px #fff, inset 0 0 28px 6px rgba(255, 255, 255, 0.75); }
+.yardGlow.on { animation: yardPulse 1.3s ease-in-out infinite; }
+@keyframes yardPulse { 0%, 100% { opacity: 0.35; } 50% { opacity: 1; } }
+@media (max-width: 900px) {
+  .dice { --d: 42px; }
+}

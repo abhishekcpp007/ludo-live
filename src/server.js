@@ -24,8 +24,8 @@ const DEFAULTS = {
   turnMs: 30 * SECOND,
   offlineTurnMs: 4 * SECOND,
   botMs: 1200,
-  autoMoveMs: 700,
-  passMs: 1100,
+  autoMoveMs: 1000,
+  passMs: 1400,
   quickWaitMs: 12 * SECOND,
   botFillMs: 15 * SECOND,
   matchStartMs: 8 * SECOND,
@@ -48,16 +48,20 @@ const MIME = {
 
 function loadStatic() {
   const files = new Map();
-  for (const name of fs.readdirSync(PUBLIC_DIR)) {
+  const names = fs.readdirSync(PUBLIC_DIR).filter((n) => MIME[path.extname(n)]);
+  const version = crypto.createHash("sha1");
+  names.forEach((n) => version.update(fs.readFileSync(path.join(PUBLIC_DIR, n))));
+  const v = version.digest("hex").slice(0, 10);
+  for (const name of names) {
     const ext = path.extname(name);
-    if (!MIME[ext]) continue;
-    const body = fs.readFileSync(path.join(PUBLIC_DIR, name));
+    let body = fs.readFileSync(path.join(PUBLIC_DIR, name));
+    if (name === "index.html") body = Buffer.from(body.toString().replace(/(src|href)="([a-z]+\.(?:js|css|svg))"/g, `$1="$2?v=${v}"`));
     files.set(`/${name}`, {
       type: MIME[ext],
       body,
       gzip: zlib.gzipSync(body, { level: zlib.constants.Z_BEST_COMPRESSION }),
       etag: `"${crypto.createHash("sha1").update(body).digest("base64url")}"`,
-      cache: ext === ".html" ? "no-cache" : "public, max-age=300, must-revalidate",
+      cache: ext === ".html" ? "no-cache" : "public, max-age=31536000, immutable",
     });
   }
   files.set("/", files.get("/index.html"));

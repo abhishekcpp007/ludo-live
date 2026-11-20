@@ -1,51 +1,72 @@
-# Ludo Live
+# 🎲 Ludo Live
 
-Live 4-player Ludo with a built-in video/audio call, online matchmaking with bots, virtual coins, a token skin shop, emotes and background music.
+**[▶ Play now](https://spell-generic-anytime-fraser.trycloudflare.com)** · open the link, type your name, tap a button and you're in.
 
-## Run with Docker
+Live 4-player Ludo with a built-in video or audio call. Play with friends through an invite link,
+or hit "Play online" and get matched with anyone. If nobody's around, bots join so you never wait long.
+
+> The link above runs from a home machine right now, so it can go offline and changes when the tunnel restarts.
+> It'll switch to a permanent Render address once that deploy is live.
+
+## What you get
+
+- **Video, audio or music only.** Your call runs peer to peer, straight between players.
+- **3D dice** that tumbles and lands on the real result, plus a glow on the yard of whoever's turn it is.
+- **Virtual coins.** Start with 1000, claim 500 free every day, pick a table (free, 100, 500, 2500) and the winner takes the pot.
+- **Token shop** with 12 skins, from Glass and Neon to Galaxy and Diamond, bought with coins.
+- **Emotes** like 😂 👏 🔥 😡 and quick lines such as "Jaldi chalo!" or "Badla lunga!".
+- **Matchmaking** by table size. Four players start at once, two or three after 12 seconds, and a solo player gets three bots after 15.
+- **Effects and sound.** Tokens hop square by square, cuts blast and shake the board, and wins get a trophy with confetti.
+- **Background music** in three moods (chill, desi beat, arcade), all generated in the browser.
+
+Coins are play money only. You can't buy them and you can't cash them out.
+
+## How to play
+
+1. Open the link and enter your name.
+2. Pick a call mode and a table.
+3. Tap **Create room for friends** and share the invite link, or tap **Play online with anyone**.
+4. Roll with the dice button or the Space key, then tap a glowing token (or press 1 to 4).
+
+Rules:
+
+- Roll a 6 to open a token. Three 6s in a row and you lose the turn.
+- Land on an opponent to cut it, except on stars and start squares.
+- A 6, a cut or a token reaching home gives you another roll. You need the exact number to finish.
+- Each turn has 30 seconds. Miss it and the best move is played for you.
+
+## Run it yourself
 
     docker compose up -d --build app                 # http://localhost:3000
-    docker compose --profile public up -d tunnel     # public https link
-    docker compose logs tunnel | grep trycloudflare  # print the link
+    docker compose --profile public up -d tunnel     # temporary public https link
+    docker compose logs tunnel | grep trycloudflare
 
-Wallets live in the `ludo-data` volume, so coins and skins survive restarts.
+Coins and skins are stored in the `ludo-data` Docker volume.
 
-## Test
+### Deploy on Render
 
-    docker build --target test .                     # 38 unit + integration tests
-    docker compose --profile e2e run --rm e2e        # 4 real Chrome players, fake camera/mic
+`render.yaml` is ready. In Render go to New, then Blueprint, pick this repo and apply.
+On the free plan the server sleeps after 15 idle minutes and coins reset on restart.
 
-The e2e run saves screenshots and `results.json` into `e2e/out/`.
+## Tests
 
-## Game
+    docker build --target test .                     # 38 unit and integration tests
+    docker compose --profile e2e run --rm e2e        # 4 real Chrome players with fake camera and mic
 
-- Roll 6 to open a token. Three 6s in a row loses the turn.
-- Landing on an opponent cuts it, except on stars and start squares.
-- Extra roll on a 6, a cut, or a token reaching home. Exact roll to finish.
-- 30 second turn timer. If you don't play, the best move is played for you.
-
-## Coins
-
-Everyone starts with 1000 virtual coins and can claim 500 free once a day.
-Tables cost 0, 100, 500 or 2500 to enter and the winner takes the whole pot.
-Coins can't be bought or cashed out. They're only for fun and for the skin shop.
-
-## Play online
-
-"Play online with anyone" puts you in a queue for your table size. Four players start right away,
-two or three start after 12 seconds, and if you're alone for 15 seconds three bots join.
-With strangers the mic and camera start off, free-text chat doesn't exist, and every tile has a mute button.
+The end-to-end run checks that every player hears the other three and sees the video players.
+It also checks that coins, the shop, emotes and matchmaking work and that there are no console errors.
+Screenshots and results land in `e2e/out/`.
 
 ## Security
 
-- Server decides every dice roll and move. Clients only send intents.
-- All socket input is validated and rate limited, per socket and per IP.
-- WebRTC signals are only relayed between players in the same room, with SDP fields whitelisted.
-- Strict CSP, no inline scripts, frame blocking, nosniff, no referrer.
-- Cross-origin socket connections are refused.
-- Container runs as a non-root user on a read-only filesystem with all capabilities dropped.
+- The server rolls every dice and checks every move. Clients only send requests.
+- Every socket message is validated and rate limited per connection and per IP.
+- Call signals only travel between players in the same room, and unknown fields are stripped.
+- Strict Content Security Policy, no inline scripts, no framing, no referrer.
+- Socket connections from other websites are refused.
+- The container runs as a non-root user on a read-only filesystem with every capability dropped.
 
-## TURN
+## Mobile data trouble
 
 If players on mobile data can't see each other, add a TURN server:
 
