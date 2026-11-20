@@ -50,6 +50,17 @@ Rules:
 
 Coins and skins are stored in the `ludo-data` Docker volume.
 
+### Run on a Windows laptop
+
+1. Install Node.js and cloudflared once, in PowerShell:
+
+       winget install OpenJS.NodeJS.LTS
+       winget install Cloudflare.cloudflared
+
+2. On GitHub open this repo, then Code, then Download ZIP, and extract it.
+3. Double-click `start-windows.bat`.
+4. Share the `https://....trycloudflare.com` link it prints. Keep both windows open.
+
 ### Deploy on Render
 
 `render.yaml` is ready. In Render go to New, then Blueprint, pick this repo and apply.
