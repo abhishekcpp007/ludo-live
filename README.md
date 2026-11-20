@@ -2,14 +2,12 @@
 
 ## ▶ Play now
 
-| Link | Note |
-|---|---|
-| **[Play on link 1](https://5824eb1f1d1cdf.app.lhr.life)** | Use this one if link 2 doesn't open on your network |
-| **[Play on link 2](https://spell-generic-anytime-fraser.trycloudflare.com)** | Some mobile networks in India block this domain |
+**[Play Ludo Live](https://spell-generic-anytime-fraser.trycloudflare.com)**
 
-Open a link, type your name, tap a button and you're in.
+Open the link, type your name, tap a button and you're in.
 
-> Both links run from a home machine for now. They go down when it sleeps and change when the tunnel restarts.
+> This link runs from a home machine for now. It goes down when that machine sleeps and changes when the tunnel restarts.
+> Some mobile networks in India block `trycloudflare.com`, so try wifi if it doesn't open.
 > A permanent address comes with the Render deploy.
 
 Live 4-player Ludo with a built-in video or audio call. Play with friends through an invite link,
@@ -28,7 +26,7 @@ or hit "Play online" and get matched with anyone. If nobody's around, bots join 
 
 ## Android app
 
-[`dist/ludo-live-1.0.0.apk`](dist/ludo-live-1.0.0.apk) (Android 8 or newer). This build opens link 2 above, so it only works while that link is up.
+[`dist/ludo-live-1.0.0.apk`](dist/ludo-live-1.0.0.apk) (Android 8 or newer). This build opens the play link above, so it only works while that link is up.
 Rebuild it against the permanent server once that's live:
 
     SERVER_URL=https://your-server ./android/build.sh
