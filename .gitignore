@@ -2,3 +2,7 @@ node_modules
 e2e/node_modules
 e2e/out
 data
+android/build
+android/*.apk
+android/*.idsig
+*.keystore

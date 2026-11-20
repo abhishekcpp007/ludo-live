@@ -1,0 +1,26 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Ludo Live</title>
+  <style>
+    html, body { margin: 0; height: 100%; }
+    body { display: grid; place-items: center; background: #0b0c1a; color: #f4f5fb; font: 16px/1.5 system-ui, sans-serif; text-align: center; padding: 24px; box-sizing: border-box; }
+    .logo { width: 64px; height: 64px; margin: 0 auto 20px; display: grid; grid-template-columns: 1fr 1fr; border-radius: 18px; overflow: hidden; transform: rotate(45deg); }
+    .logo i:nth-child(1) { background: #ef4444; } .logo i:nth-child(2) { background: #22c55e; }
+    .logo i:nth-child(3) { background: #3b82f6; } .logo i:nth-child(4) { background: #facc15; }
+    h1 { font-size: 22px; margin: 0 0 6px; }
+    p { color: #9ca3c4; margin: 0 0 22px; }
+    button { font: inherit; font-weight: 700; color: #fff; border: 0; border-radius: 12px; padding: 13px 30px; background: linear-gradient(135deg, #8b5cf6, #6366f1); }
+  </style>
+</head>
+<body>
+  <div>
+    <div class="logo"><i></i><i></i><i></i><i></i></div>
+    <h1>Server tak nahi pahunch paye</h1>
+    <p>Internet check karo aur dobara try karo.</p>
+    <button onclick="LudoAndroid.retry()">Try again</button>
+  </div>
+</body>
+</html>

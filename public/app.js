@@ -394,6 +394,10 @@
   async function invite() {
     if (!roomCode) return;
     const link = `${location.origin}/?room=${roomCode}`;
+    if (window.LudoAndroid) {
+      window.LudoAndroid.share(`Aaja Ludo khelte hain 🎲 ${link}`);
+      return;
+    }
     if (navigator.share && matchMedia("(pointer: coarse)").matches) {
       navigator.share({ title: "Ludo Live", text: "Aaja Ludo khelte hain", url: link }).catch(() => {});
       return;
