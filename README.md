@@ -1,6 +1,16 @@
 # 🎲 Ludo Live
 
-**[▶ Play now](https://spell-generic-anytime-fraser.trycloudflare.com)** · open the link, type your name, tap a button and you're in.
+## ▶ Play now
+
+| Link | Note |
+|---|---|
+| **[Play on link 1](https://5824eb1f1d1cdf.app.lhr.life)** | Use this one if link 2 doesn't open on your network |
+| **[Play on link 2](https://spell-generic-anytime-fraser.trycloudflare.com)** | Some mobile networks in India block this domain |
+
+Open a link, type your name, tap a button and you're in.
+
+> Both links run from a home machine for now. They go down when it sleeps and change when the tunnel restarts.
+> A permanent address comes with the Render deploy.
 
 Live 4-player Ludo with a built-in video or audio call. Play with friends through an invite link,
 or hit "Play online" and get matched with anyone. If nobody's around, bots join so you never wait long.
