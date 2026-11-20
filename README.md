@@ -15,9 +15,6 @@ Open a link, type your name, tap a button and you're in.
 Live 4-player Ludo with a built-in video or audio call. Play with friends through an invite link,
 or hit "Play online" and get matched with anyone. If nobody's around, bots join so you never wait long.
 
-> The link above runs from a home machine right now, so it can go offline and changes when the tunnel restarts.
-> It'll switch to a permanent Render address once that deploy is live.
-
 ## What you get
 
 - **Video, audio or music only.** Your call runs peer to peer, straight between players.
