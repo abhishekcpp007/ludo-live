@@ -4,6 +4,9 @@
 
 **[Play Ludo Live](https://spell-generic-anytime-fraser.trycloudflare.com)**
 
+**Code:** https://github.com/abhishekcpp007/ludo-live
+**Android APK:** [download ludo-live-1.0.0.apk](https://github.com/abhishekcpp007/ludo-live/raw/main/dist/ludo-live-1.0.0.apk)
+
 Open the link, type your name, tap a button and you're in.
 
 > This link runs from a home machine for now. It goes down when that machine sleeps and changes when the tunnel restarts.
